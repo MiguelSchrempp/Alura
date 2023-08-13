@@ -1,3 +1,5 @@
+package studies;
+
 public class TempConverter {
     public static void main(String[] args) {
         double celsio = 22.36;

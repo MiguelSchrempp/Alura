@@ -1,3 +1,5 @@
+package studies;
+
 import java.util.Scanner;
 
 public class OtherLoop {
