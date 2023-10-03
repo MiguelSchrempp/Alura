@@ -1,3 +1,5 @@
+package applying.oop.principal;
+
 import applying.oop.calculo.CalculadoraDeTempo;
 import applying.oop.calculo.FiltroRecomendacao;
 import applying.oop.entidade.Episodio;
