@@ -1,6 +1,6 @@
 package applying.oop.entidade;
 
-public class Titulo {
+public class Titulo implements Comparable<Titulo>{
     private String nome;
     private int dataDeLancamento;
     private boolean inclusoNoPlano;
@@ -63,5 +63,10 @@ public class Titulo {
 
     public double obterMediaDasNotas() {
         return somaDasAvaliacoes / totalDeAvaliacoes;
+    }
+
+    @Override
+    public int compareTo(Titulo outroTitulo) {
+        return this.getNome().compareTo(outroTitulo.getNome());
     }
 }

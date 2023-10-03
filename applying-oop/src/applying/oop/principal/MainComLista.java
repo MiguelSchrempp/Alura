@@ -4,7 +4,7 @@ import applying.oop.entidade.Filme;
 import applying.oop.entidade.Serie;
 import applying.oop.entidade.Titulo;
 
-import java.util.ArrayList;
+import java.util.*;
 
 public class MainComLista {
     public static void main(String[] args) {
@@ -28,8 +28,26 @@ public class MainComLista {
             if (titulo instanceof Filme filme && filme.getClassificacao() > 2){
                 System.out.println("Classificação: " + filme.getClassificacao());
             }
-
-
         }
+
+        List<String> buscaPorArtista = new LinkedList<>();
+
+        buscaPorArtista.add("Adam Sandler");
+        buscaPorArtista.add("Paulo");
+        buscaPorArtista.add("Jacqueline");
+        System.out.println(buscaPorArtista);
+
+        System.out.println("Ordenando:");
+        Collections.sort(buscaPorArtista);
+        System.out.println(buscaPorArtista);
+
+        System.out.println("Lista de titulos ordenados");
+        Collections.sort(lista);
+        System.out.println(lista);
+
+        System.out.println("Lista ordenada por ano");
+        lista.sort(Comparator.comparing(Titulo::getDataDeLancamento));
+        System.out.println(lista);
+
     }
 }
