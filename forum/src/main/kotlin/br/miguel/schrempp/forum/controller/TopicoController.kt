@@ -7,7 +7,9 @@ import org.springframework.web.bind.annotation.*
 
 @RestController
 @RequestMapping("/topicos")
-class TopicoController(val topicoService: TopicoService) {
+class TopicoController(
+    val topicoService: TopicoService
+) {
 
     @GetMapping()
     fun listar(): List<TopicoResponse> {
