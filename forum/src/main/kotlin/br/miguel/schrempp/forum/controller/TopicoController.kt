@@ -3,6 +3,7 @@ package br.miguel.schrempp.forum.controller
 import br.miguel.schrempp.forum.dto.NovoTopicoRequest
 import br.miguel.schrempp.forum.dto.TopicoResponse
 import br.miguel.schrempp.forum.service.TopicoService
+import jakarta.validation.Valid
 import org.springframework.web.bind.annotation.*
 
 @RestController
@@ -22,7 +23,7 @@ class TopicoController(
     }
 
     @PostMapping()
-    fun cadastrar(@RequestBody dto: NovoTopicoRequest) {
+    fun cadastrar(@RequestBody @Valid dto: NovoTopicoRequest) {
         topicoService.cadastrar(dto)
     }
 
