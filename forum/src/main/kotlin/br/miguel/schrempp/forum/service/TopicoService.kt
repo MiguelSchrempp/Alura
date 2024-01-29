@@ -1,11 +1,11 @@
 package br.miguel.schrempp.forum.service
 
-import br.miguel.schrempp.forum.dto.NovoTopicoDto
-import br.miguel.schrempp.forum.model.Topico
+import br.miguel.schrempp.forum.dto.NovoTopicoRequest
+import br.miguel.schrempp.forum.dto.TopicoResponse
 
 
 interface TopicoService {
-    fun listar(): List<Topico>
-    fun buscarPorId(id: Long): Topico
-    fun cadastrar(dto: NovoTopicoDto)
+    fun listar(): List<TopicoResponse>
+    fun buscarPorId(id: Long): TopicoResponse
+    fun cadastrar(dto: NovoTopicoRequest)
 }

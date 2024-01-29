@@ -1,7 +1,7 @@
 package br.miguel.schrempp.forum.controller
 
-import br.miguel.schrempp.forum.dto.NovoTopicoDto
-import br.miguel.schrempp.forum.model.Topico
+import br.miguel.schrempp.forum.dto.NovoTopicoRequest
+import br.miguel.schrempp.forum.dto.TopicoResponse
 import br.miguel.schrempp.forum.service.TopicoService
 import org.springframework.web.bind.annotation.*
 
@@ -10,17 +10,17 @@ import org.springframework.web.bind.annotation.*
 class TopicoController(val topicoService: TopicoService) {
 
     @GetMapping()
-    fun listar(): List<Topico> {
+    fun listar(): List<TopicoResponse> {
         return topicoService.listar()
     }
 
     @GetMapping("/{id}")
-    fun buscarPorId(@PathVariable id: Long): Topico {
+    fun buscarPorId(@PathVariable id: Long): TopicoResponse {
         return topicoService.buscarPorId(id)
     }
 
     @PostMapping()
-    fun cadastrar(@RequestBody dto: NovoTopicoDto) {
+    fun cadastrar(@RequestBody dto: NovoTopicoRequest) {
         topicoService.cadastrar(dto)
     }
 
