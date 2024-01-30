@@ -1,5 +1,6 @@
 package br.miguel.schrempp.forum.impl
 
+import br.miguel.schrempp.forum.dto.AttTopicoRequest
 import br.miguel.schrempp.forum.dto.NovoTopicoRequest
 import br.miguel.schrempp.forum.dto.TopicoResponse
 import br.miguel.schrempp.forum.mapper.TopicoRequestMapper
@@ -30,12 +31,36 @@ class TopicoServiceImpl(
         return topicoResponseMapper.toMap(topico)
     }
 
-    override fun cadastrar(dto: NovoTopicoRequest) {
+    override fun cadastrar(dto: NovoTopicoRequest): TopicoResponse {
         val topico = topicoRequestMapper.toMap(dto)
+        topico.id = topicos.size.toLong() + 1
+        topicos = topicos.plus(topico)
 
-        topicos = topicos.plus(topico.copy(
-            id = topicos.size.toLong() + 1
-        ))
+        return topicoResponseMapper.toMap(topico)
+    }
+
+    override fun atualizar(attTopicoRequest: AttTopicoRequest): TopicoResponse {
+        val topico = topicos.stream().filter { topico ->
+            topico.id == attTopicoRequest.id
+        }.findFirst().get()
+
+        val topicoAtualizado = topico.copy(
+            id = attTopicoRequest.id,
+            titulo = attTopicoRequest.titulo,
+            mensagem = attTopicoRequest.mensagem
+        )
+
+        topicos = topicos.minus(topico).plus(topicoAtualizado)
+
+        return topicoResponseMapper.toMap(topicoAtualizado)
+    }
+
+    override fun deletar(id: Long) {
+        val topico = topicos.stream().filter { topico ->
+            topico.id == id
+        }.findFirst().get()
+
+        topicos = topicos.minus(topico)
     }
 
 
