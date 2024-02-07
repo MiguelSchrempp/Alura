@@ -3,6 +3,7 @@ package br.miguel.schrempp.forum.impl
 import br.miguel.schrempp.forum.dto.AttTopicoRequest
 import br.miguel.schrempp.forum.dto.NovoTopicoRequest
 import br.miguel.schrempp.forum.dto.TopicoResponse
+import br.miguel.schrempp.forum.exception.NotFoundException
 import br.miguel.schrempp.forum.mapper.TopicoRequestMapper
 import br.miguel.schrempp.forum.mapper.TopicoResponseMapper
 import br.miguel.schrempp.forum.model.Topico
@@ -26,7 +27,7 @@ class TopicoServiceImpl(
     override fun buscarPorId(id: Long): TopicoResponse {
         val topico = topicos.stream().filter { topico ->
             topico.id == id
-        }.findFirst().get()
+        }.findFirst().orElseThrow{NotFoundException(NOT_FOUND_MESSAGE)}
 
         return topicoResponseMapper.toMap(topico)
     }
@@ -58,10 +59,13 @@ class TopicoServiceImpl(
     override fun deletar(id: Long) {
         val topico = topicos.stream().filter { topico ->
             topico.id == id
-        }.findFirst().get()
+        }.findFirst().orElseThrow{NotFoundException(NOT_FOUND_MESSAGE)}
 
         topicos = topicos.minus(topico)
     }
 
 
+    companion object {
+        private const val NOT_FOUND_MESSAGE: String = "Não encontrado"
+    }
 }
