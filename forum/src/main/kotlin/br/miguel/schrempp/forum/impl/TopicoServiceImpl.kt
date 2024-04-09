@@ -7,25 +7,26 @@ import br.miguel.schrempp.forum.exception.NotFoundException
 import br.miguel.schrempp.forum.mapper.TopicoRequestMapper
 import br.miguel.schrempp.forum.mapper.TopicoResponseMapper
 import br.miguel.schrempp.forum.model.Topico
+import br.miguel.schrempp.forum.repository.TopicoRepository
 import br.miguel.schrempp.forum.service.TopicoService
 import org.springframework.stereotype.Service
 import java.util.stream.Collectors
 
 @Service
 class TopicoServiceImpl(
-    private var topicos: List<Topico> = ArrayList(),
+    private val topicoRepository: TopicoRepository,
     private val topicoRequestMapper: TopicoRequestMapper,
     private val topicoResponseMapper: TopicoResponseMapper
 ) : TopicoService {
 
     override fun listar(): List<TopicoResponse> {
-        return topicos.stream().map { topico ->
+        return topicoRepository.findAll().map { topico ->
             topicoResponseMapper.toMap(topico)
-        }.collect(Collectors.toList())
+        }
     }
 
     override fun buscarPorId(id: Long): TopicoResponse {
-        val topico = topicos.stream().filter { topico ->
+        val topico = topicoRepository.findById(id).stream().filter { topico ->
             topico.id == id
         }.findFirst().orElseThrow{NotFoundException(NOT_FOUND_MESSAGE)}
 
@@ -34,38 +35,31 @@ class TopicoServiceImpl(
 
     override fun cadastrar(dto: NovoTopicoRequest): TopicoResponse {
         val topico = topicoRequestMapper.toMap(dto)
-        topico.id = topicos.size.toLong() + 1
-        topicos = topicos.plus(topico)
-
+        topicoRepository.save(topico)
         return topicoResponseMapper.toMap(topico)
     }
 
     override fun atualizar(attTopicoRequest: AttTopicoRequest): TopicoResponse {
-        val topico = topicos.stream().filter { topico ->
-            topico.id == attTopicoRequest.id
-        }.findFirst().get()
+        val topico = topicoRepository.findById(attTopicoRequest.id).orElseThrow {
+            NotFoundException(NOT_FOUND_MESSAGE)
+        }
 
-        val topicoAtualizado = topico.copy(
-            id = attTopicoRequest.id,
-            titulo = attTopicoRequest.titulo,
-            mensagem = attTopicoRequest.mensagem
+        val topicoAtualizado = topicoRepository.save(
+            topico.copy(
+                titulo = attTopicoRequest.titulo,
+                mensagem = attTopicoRequest.mensagem
+            )
         )
-
-        topicos = topicos.minus(topico).plus(topicoAtualizado)
 
         return topicoResponseMapper.toMap(topicoAtualizado)
     }
 
     override fun deletar(id: Long) {
-        val topico = topicos.stream().filter { topico ->
-            topico.id == id
-        }.findFirst().orElseThrow{NotFoundException(NOT_FOUND_MESSAGE)}
-
-        topicos = topicos.minus(topico)
+        topicoRepository.deleteById(id)
     }
 
 
     companion object {
-        private const val NOT_FOUND_MESSAGE: String = "Não encontrado"
+        private const val NOT_FOUND_MESSAGE: String = "Tópico não encontrado"
     }
 }
